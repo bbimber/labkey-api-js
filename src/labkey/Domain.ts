@@ -19,7 +19,6 @@ import {
     getCallbackWrapper,
     getOnFailure,
     getOnSuccess,
-    isString,
     RequestCallbackOptions,
 } from './Utils'
 
@@ -173,42 +172,14 @@ export interface CreateDomainOptions extends RequestCallbackOptions {
  * });
  * ```
  */
-export function create(config: CreateDomainOptions): XMLHttpRequest {
-
-    let options = arguments.length > 1 ? mapCreateArguments(arguments) : config;
-
+export function create(options: CreateDomainOptions): XMLHttpRequest {
     return request({
         url: buildURL('property', 'createDomain.api', options.containerPath),
         method: 'POST',
         jsonData: options,
-        success: getCallbackWrapper(getOnSuccess(options), config.scope),
-        failure: getCallbackWrapper(getOnFailure(options), config.scope, true)
+        success: getCallbackWrapper(getOnSuccess(options), options.scope),
+        failure: getCallbackWrapper(getOnFailure(options), options.scope, true)
     });
-}
-
-/**
- * @private
- */
-function mapCreateArguments(args: IArguments): CreateDomainOptions {
-
-    let options: CreateDomainOptions = {
-        failure: args[1],
-        success: args[0]
-    };
-
-    if ((args.length === 4 || args.length === 5) && isString(args[3])) {
-        options.containerPath = args[4];
-        options.domainGroup = args[2];
-        options.domainTemplate = args[3];
-    }
-    else {
-        options.containerPath = args[5];
-        options.domainDesign = args[3];
-        options.kind = args[2];
-        options.options = args[4];
-    }
-
-    return options;
 }
 
 export interface DropDomainOptions extends RequestCallbackOptions {

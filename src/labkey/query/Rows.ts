@@ -60,20 +60,6 @@ export interface QueryRequestOptions extends RequestCallbackOptions {
 }
 
 /**
- * @hidden
- * @private
- */
-function applyArguments(options: QueryRequestOptions, args: IArguments, action: string): SendRequestOptions {
-    return args && args.length > 1 ? {
-        ...queryArguments(args),
-        action
-    } : {
-        ...options,
-        action
-    };
-}
-
-/**
  * Delete specific rows in a table.
  *
  * @returns In client-side scripts, this method will return a transaction id
@@ -81,7 +67,7 @@ function applyArguments(options: QueryRequestOptions, args: IArguments, action: 
  * this method will return the JSON response object (first parameter of the success or failure callbacks).
  */
 export function deleteRows(options: QueryRequestOptions): XMLHttpRequest {
-    return sendRequest(applyArguments(options, arguments, 'deleteRows.api'));
+    return sendRequest('deleteRows.api', options);
 }
 
 /**
@@ -118,22 +104,7 @@ export function deleteRows(options: QueryRequestOptions): XMLHttpRequest {
  * this method will return the JSON response object (first parameter of the success or failure callbacks).
  */
 export function insertRows(options: QueryRequestOptions): XMLHttpRequest {
-    return sendRequest(applyArguments(options, arguments, 'insertRows.api'));
-}
-
-// previously configFromArgs
-/**
- * @hidden
- * @private
- */
-function queryArguments(args: IArguments): QueryRequestOptions {
-    return {
-        schemaName: args[0],
-        queryName: args[1],
-        rows: args[2],
-        success: args[3],
-        failure: args[4]
-    }
+    return sendRequest('insertRows.api', options);
 }
 
 export type CommandType = 'delete' | 'insert' | 'update';
@@ -257,14 +228,6 @@ export interface SaveRowsOptions extends RequestCallbackOptions<SaveRowsResponse
  * this method will return the JSON response object (first parameter of the success or failure callbacks).
  */
 export function saveRows(options: SaveRowsOptions): XMLHttpRequest {
-
-    // Nick: I've elected to comment this out as saveRows never supported the same argument
-    // pattern as other endpoints due to the different nature of it's arguments (e.g. doesn't take a
-    // schema/query but rather commands, etc). As a result, the object would not match what is expected.
-    // if (arguments.length > 1) {
-    //     options = queryArguments(arguments);
-    // }
-
     return request({
         url: buildURL('query', 'saveRows.api', options.containerPath),
         method: 'POST',
@@ -282,18 +245,13 @@ export function saveRows(options: SaveRowsOptions): XMLHttpRequest {
     });
 }
 
-interface SendRequestOptions extends QueryRequestOptions {
-    action: string
-}
-
-// Formerly sendJsonQueryRequest
 /**
  * @hidden
  * @private
  */
-function sendRequest(options: SendRequestOptions): XMLHttpRequest {
+function sendRequest(action: string, options: QueryRequestOptions): XMLHttpRequest {
     return request({
-        url: buildURL('query', options.action, options.containerPath),
+        url: buildURL('query', action, options.containerPath),
         method: 'POST',
         success: getCallbackWrapper(getOnSuccess(options), options.scope),
         failure: getCallbackWrapper(getOnFailure(options), options.scope, true),
@@ -319,7 +277,7 @@ function sendRequest(options: SendRequestOptions): XMLHttpRequest {
  * this method will return the JSON response object (first parameter of the success or failure callbacks).
  */
 export function truncateTable(options: QueryRequestOptions): XMLHttpRequest {
-    return sendRequest(applyArguments(options, undefined, 'truncateTable.api'));
+    return sendRequest('truncateTable.api', options);
 }
 
 /**
@@ -330,5 +288,5 @@ export function truncateTable(options: QueryRequestOptions): XMLHttpRequest {
  * this method will return the JSON response object (first parameter of the success or failure callbacks).
  */
 export function updateRows(options: QueryRequestOptions): XMLHttpRequest {
-    return sendRequest(applyArguments(options, arguments, 'updateRows.api'));
+    return sendRequest('updateRows.api', options);
 }

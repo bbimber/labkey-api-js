@@ -20,11 +20,8 @@ import {
     updateRows,
 } from './Rows'
 
-describe('deleteRows', () => {
-    it('should support original method signature', () => {
-        // Original method signature:
-        // deleteRows(schemaName, queryName, rows, success, failure)
-
+describe('Query row interfaces', () => {
+    it('#deleteRows', () => {
         // Arrange
         const requestSpy = jest.spyOn(Ajax, 'request').mockImplementation();
         const schemaName = 'SSS';
@@ -32,7 +29,7 @@ describe('deleteRows', () => {
         const rows = [{ rowId: 1 }, { rowId: 2 }];
 
         // Act
-        (deleteRows as any)(schemaName, queryName, rows, undefined, undefined);
+        deleteRows({ schemaName, queryName, rows });
 
         // Assert
         expect(requestSpy).toHaveBeenCalledWith(expect.objectContaining({
@@ -45,13 +42,7 @@ describe('deleteRows', () => {
             url: '/query/deleteRows.api',
         }));
     });
-});
-
-describe('insertRows', () => {
-    it('should support original method signature', () => {
-        // Original method signature:
-        // insertRows(schemaName, queryName, rows, success, failure)
-
+    it('#insertRows', () => {
         // Arrange
         const requestSpy = jest.spyOn(Ajax, 'request').mockImplementation();
         const schemaName = 'SSS';
@@ -59,7 +50,7 @@ describe('insertRows', () => {
         const rows = [{ rowId: 1 }, { rowId: 2 }];
 
         // Act
-        (insertRows as any)(schemaName, queryName, rows, undefined, undefined);
+        insertRows({ schemaName, queryName, rows });
 
         // Assert
         expect(requestSpy).toHaveBeenCalledWith(expect.objectContaining({
@@ -72,13 +63,7 @@ describe('insertRows', () => {
             url: '/query/insertRows.api',
         }));
     });
-});
-
-describe('updateRows', () => {
-    it('should support original method signature', () => {
-        // Original method signature:
-        // updateRows(schemaName, queryName, rows, success, failure)
-
+    it('#updateRows', () => {
         // Arrange
         const requestSpy = jest.spyOn(Ajax, 'request').mockImplementation();
         const schemaName = 'SSS';
@@ -86,7 +71,7 @@ describe('updateRows', () => {
         const rows = [{ rowId: 1 }, { rowId: 2 }];
 
         // Act
-        (updateRows as any)(schemaName, queryName, rows, undefined, undefined);
+        updateRows({ schemaName, queryName, rows });
 
         // Assert
         expect(requestSpy).toHaveBeenCalledWith(expect.objectContaining({

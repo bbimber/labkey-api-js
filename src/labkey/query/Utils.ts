@@ -57,12 +57,7 @@ export enum ContainerFilter {
 
     /** Include the current folder plus its project plus any shared folders. */
     currentPlusProjectAndShared = 'CurrentPlusProjectAndShared',
-};
-
-/**
- * @deprecated Backwards compatible reference to [[ContainerFilter]].
- */
-export const containerFilter = ContainerFilter;
+}
 
 export const URL_COLUMN_PREFIX = '_labkeyurl_';
 

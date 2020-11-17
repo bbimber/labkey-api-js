@@ -15,7 +15,7 @@
  */
 import { buildURL } from '../ActionURL'
 import { request } from '../Ajax'
-import { getCallbackWrapper, getOnFailure, getOnSuccess, merge } from '../Utils'
+import { getCallbackWrapper, getOnFailure, getOnSuccess } from '../Utils'
 import { appendFilterParams } from '../filter/Filter'
 import { ContainerFilter } from '../query/Utils'
 
@@ -67,7 +67,7 @@ export function exportTables(options: IExportTablesOptions): void {
     }
 
     // Create a copy of the schema config that we can mutate
-    let schemas = merge({}, options.schemas);
+    let schemas = { ...options.schemas };
     for (let schemaName in schemas) {
         if (!schemas.hasOwnProperty(schemaName)) {
             continue;
@@ -76,7 +76,7 @@ export function exportTables(options: IExportTablesOptions): void {
         let queryList = schemas[schemaName];
         for (let i = 0; i < queryList.length; i++) {
             let querySettings = queryList[i];
-            let o = merge({}, querySettings);
+            let o = { ...querySettings };
 
             delete o.filter;
             delete o.filterArray;

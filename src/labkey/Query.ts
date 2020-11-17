@@ -16,7 +16,6 @@
 import {
     buildQueryParams,
     ContainerFilter,
-    containerFilter,
     deleteQueryView,
     getDataViews,
     getQueries,
@@ -57,7 +56,6 @@ export {
     QueryColumn,
 
     ContainerFilter, // Enumeration
-    containerFilter, // backwards compatible reference
     buildQueryParams,
     deleteQueryView,
     deleteRows,

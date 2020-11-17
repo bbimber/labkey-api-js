@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ContainerFilter, containerFilter, getSuccessCallbackWrapper } from './Utils'
+import { ContainerFilter, getSuccessCallbackWrapper } from './Utils'
 import { Response } from './Response'
 
 describe('ContainerFilter', () => {
@@ -30,10 +30,6 @@ describe('ContainerFilter', () => {
         // All "values" of the ContainerFilter enum should be covered here -- if it has changed
         // this test will fail and the test should be updated accordingly.
         expect(Object.keys(ContainerFilter).length).toEqual(7);
-    });
-    it('should be equivalent to "containerFilter"', () => {
-        // Backwards compatibility support
-        expect(ContainerFilter).toStrictEqual(containerFilter);
     });
 });
 

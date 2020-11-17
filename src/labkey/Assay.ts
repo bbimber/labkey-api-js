@@ -23,7 +23,6 @@ import {
     getCallbackWrapper,
     getOnFailure,
     getOnSuccess,
-    merge,
     RequestCallbackOptions
 } from './Utils'
 
@@ -236,7 +235,7 @@ export interface GetNAbRunsOptions extends RequestCallbackOptions {
  * @param options
  */
 export function getNAbRuns(options: GetNAbRunsOptions): XMLHttpRequest {
-    let params = merge({}, options);
+    let params: any = { ...options };
 
     if (options.sort) {
         params['query.sort'] = options.sort;
@@ -384,7 +383,7 @@ export interface GetStudyNabRunsOptions extends RequestCallbackOptions {
 export function getStudyNabRuns(options: GetStudyNabRunsOptions): XMLHttpRequest {
     return request({
         url: buildURL('nabassay', 'getStudyNabRuns.api', options.containerPath),
-        params: merge({}, options),
+        params: { ...options },
         success: getCallbackWrapper(
             getOnSuccess(options),
             options.scope,

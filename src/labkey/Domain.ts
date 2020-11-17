@@ -199,7 +199,6 @@ export interface DropDomainOptions extends RequestCallbackOptions {
  * Delete a domain.
  */
 export function drop(config: DropDomainOptions): XMLHttpRequest {
-
     return request({
         url: buildURL('property', 'deleteDomain.api', config.containerPath),
         method: 'POST',
@@ -213,7 +212,7 @@ export function drop(config: DropDomainOptions): XMLHttpRequest {
     });
 }
 
-export interface BaseGetDomainOptions {
+export interface GetDomainDetailsOptions extends RequestCallbackOptions<GetDomainDetailsResponse> {
     /**
      * The container path in which the requested Domain is defined.
      * If not supplied, the current container path will be used.
@@ -224,6 +223,11 @@ export interface BaseGetDomainOptions {
      * SchemaName and queryName will be ignored if this value is not undefined or null.
      */
     domainId?: number
+    /**
+     * The domain kind, used for the create domain case when you want to get the details/options
+     * for the given domain kind.
+     */
+    domainKind?: string
     /** The domain query name. */
     queryName?: string
     /** The domain schema name. */
@@ -234,12 +238,6 @@ export interface GetDomainDetailsResponse {
     domainDesign: DomainDesign
     domainKindName: string
     options?: any
-}
-
-export interface GetDomainDetailsOptions extends
-    BaseGetDomainOptions, RequestCallbackOptions<GetDomainDetailsResponse> {
-    /** The domain kind, used for the create domain case when you want to get the details/options for the given domain kind. */
-    domainKind?: string
 }
 
 /**
@@ -268,16 +266,7 @@ export interface GetDomainDetailsOptions extends
  *  });
  * ```
  */
-export function getDomainDetails(config: GetDomainDetailsOptions): XMLHttpRequest {
-
-    let options: GetDomainDetailsOptions = arguments.length > 1 ? {
-        containerPath: arguments[4],
-        failure: arguments[1],
-        queryName: arguments[3],
-        schemaName: arguments[2],
-        success: arguments[0]
-    } : config;
-
+export function getDomainDetails(options: GetDomainDetailsOptions): XMLHttpRequest {
     return request({
         url: buildURL('property', 'getDomainDetails.api', options.containerPath),
         success: getCallbackWrapper(getOnSuccess(options), options.scope),
@@ -287,33 +276,6 @@ export function getDomainDetails(config: GetDomainDetailsOptions): XMLHttpReques
             queryName: options.queryName,
             domainId: options.domainId,
             domainKind: options.domainKind
-        }
-    });
-}
-
-export interface GetDomainOptions extends BaseGetDomainOptions, RequestCallbackOptions<DomainDesign> { }
-
-/**
- * Gets a domain design. This is a deprecated. Use [[getDomainDetails]] instead.
- * @deprecated
- */
-export function get(config: GetDomainOptions): XMLHttpRequest {
-    let options: GetDomainOptions = arguments.length > 1 ? {
-        containerPath: arguments[4],
-        failure: arguments[1],
-        queryName: arguments[3],
-        schemaName: arguments[2],
-        success: arguments[0]
-    } : config;
-
-    return request({
-        url: buildURL('property', 'getDomain.api', options.containerPath),
-        success: getCallbackWrapper(getOnSuccess(options), options.scope),
-        failure: getCallbackWrapper(getOnFailure(options), options.scope, true),
-        params: {
-            schemaName: options.schemaName,
-            queryName: options.queryName,
-            domainId: options.domainId
         }
     });
 }
@@ -348,19 +310,7 @@ export interface SaveDomainOptions extends RequestCallbackOptions {
 /**
  * Saves the provided domain design.
  */
-export function save(config: SaveDomainOptions): XMLHttpRequest {
-
-    let options: SaveDomainOptions = arguments.length > 1 ? {
-        success: arguments[0],
-        failure: arguments[1],
-        domainDesign: arguments[2],
-        schemaName: arguments[3],
-        queryName: arguments[4],
-        containerPath: arguments[5],
-        includeWarnings: arguments[6],
-        options: arguments[7],
-    } : config;
-
+export function save(options: SaveDomainOptions): XMLHttpRequest {
     return request({
         url: buildURL('property', 'saveDomain.api', options.containerPath),
         method: 'POST',

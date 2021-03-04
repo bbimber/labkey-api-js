@@ -22,7 +22,6 @@ export interface FormWindow extends Window {
 
 export interface LabKeyDOM extends LabKey {
     $: any
-    requiresExt4ClientAPI: Function
 }
 
 declare const LABKEY: LabKeyDOM;

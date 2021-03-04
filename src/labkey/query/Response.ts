@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isArray, isDefined, isFunction } from '../Utils'
+import { isArray, isFunction } from '../Utils'
 
 import { FieldKey } from '../FieldKey'
 import { SchemaKey } from '../SchemaKey'
-
-interface ExtRoot {
-    Ext?: any
-    Ext4?: any
-}
-
-declare type ExtWindow = Window & ExtRoot;
-
-declare const window: ExtWindow;
 
 /**
  * @hidden
@@ -122,19 +113,6 @@ export class Response {
                     field.getDisplayField = generateGetDisplayField(field.displayField, fields);
                 }
 
-                // Only parse the 'extFormatFn' if ExtJS is present
-                // checking to see if the fn ExtJS version and the window ExtJS version match
-                if (field.extFormatFn) {
-                    const ext4Index = field.extFormatFn.indexOf('Ext4.'),
-                          isExt4Fn = ext4Index === 0 || ext4Index === 1,
-                          canEvalExt3 = !isExt4Fn && window && isDefined(window.Ext),
-                          canEvalExt4 = isExt4Fn && window && isDefined(window.Ext4);
-
-                    if (canEvalExt3 || canEvalExt4) {
-                        field.extFormatFn = eval(field.extFormatFn);
-                    }
-                }
-
                 this.metaData.fields[i] = field;
             }
 
@@ -156,8 +134,8 @@ export class Response {
     }
 
     /**
-     * Returns an array of objects that can be used to assist in creating grids using ExtJs.
-     * @returns {any} Returns an array of Objects that can be used to assist in creating Ext Grids to render the data.
+     * Returns an array of objects that can be used to assist in creating grids.
+     * @returns {any} Returns an array of Objects that can be used to assist in creating grids to render the data.
      */
     getColumnModel(): any {
         return this.columnModel;
@@ -185,10 +163,10 @@ export class Response {
      *    * <strong>getDisplayField</strong>: {Function} If the field has a display field this function will return
      *    the metadata field object for that field.
      *  * <strong>id</strong>: Name of the primary key column.
-     *  * <strong>root</strong>: Name of the property containing rows ("rows"). This is mainly for the Ext grid component.
+     *  * <strong>root</strong>: Name of the property containing rows ("rows").
      *  * <strong>title</strong>:
      *  * <strong>totalProperty</strong>: Name of the top-level property containing the row count ("rowCount") in our
-     *  case. This is mainly for the Ext grid component.
+     *  case.
      */
     getMetaData(): any {
         return this.metaData;

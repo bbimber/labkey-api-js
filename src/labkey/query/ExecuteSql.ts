@@ -103,7 +103,6 @@ function buildParams(options: IExecuteSqlOptions): any {
         sql: options.sql
     };
 
-    // Work with Ext4.Ajax.request
     if (options.saveInSession !== undefined && options.saveInSession !== null) {
         jsonData.saveInSession = options.saveInSession;
     }
